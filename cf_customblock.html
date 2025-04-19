@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Access Restricted</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;text-align:center;margin:30px auto;max-width:600px;color:#333;line-height:1.4}
+h1{color:#f04040;margin-top:10px}
+.box{padding:15px;border:1px solid #ddd;border-radius:5px;background:#f5f5f5;margin:20px 0}
+.waf{color:#f04040;font-size:16px;margin-top:15px}
+.info{width:610px;height:90px;margin:10px auto}
+</style>
+</head>
+<body>
+<!-- Replace with your preferred image URL -->
+<div class="img">
+<img src="https://www.cloudflare.com/img/logo-cloudflare-dark.svg" alt="Security Restriction" width="161" height="90">
+</div>
+
+<div id="geo-block" style="display:none;">
+  <h1>Geographic Restriction</h1>
+  <p><b>Thank you for your visiting</b></p>
+  <p>We regret to inform you that this website is only available to visitors accessing from within the <br>United States</br>.</p>
+  
+  <div class="box">
+    <p>Our systems have detected that your current location is :<span id="country-code">GEO</span></p>
+    <p>Access to this website is restricted to U.S. locations only</p>
+  </div>
+
+  <p>If you are physically located within the United States and using a VPN service, please disable it and refresh this page. For further assistance, our support team is available to help you.</p>
+</div>
+
+<div id="waf-block" style="display:none;">
+  <h1>Security Alert</h1>
+  <p><b>We've blocked this request to protect our website.</b></p>
+  <div class="box">
+    <p>Our Web Application Firewall has detected potentially malicious activity from your current request.</p>
+    <p>Access to this website has been blocked for security reasons.</p>
+  </div>
+  
+  <p>If you believe this is a mistake, please contact the website administrator with the information below.</p>
+</div>
+
+<p class="err" id="error-details">Error: 403 Forbidden | Ray ID: {{ray_id}} | Your IP: {{client_ip}} | <span id="additional-info"></span></p>
+
+<script>
+  // Cloudflare variables to check (replace these with actual CF variable names)
+  var blockType = "{{cf.block_type}}"; // Example variable - replace with actual CF variable
+  var countryCode = "{{cf.country}}";  // Example variable - replace with actual CF variable
+  
+  // Determine which message to show
+  window.onload = function() {
+    if (blockType === "country" || blockType === "geo") {
+      document.getElementById("geo-block").style.display = "block";
+      document.getElementById("country-code").innerText = countryCode;
+      document.getElementById("additional-info").innerText = "Country: " + countryCode;
+    } else {
+      document.getElementById("waf-block").style.display = "block";
+      document.getElementById("additional-info").innerText = "Timestamp: {{timestamp}}";
+    }
+  }
+</script>
+</body>
+</html>
