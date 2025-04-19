@@ -20,11 +20,11 @@ h1{color:#f04040;margin-top:10px}
 <div id="geo-block" style="display:none;">
   <h1>Geographic Restriction</h1>
   <p><b>Thank you for visiting</b></p>
-  <p>We regret to inform you that this website is only available to visitors accessing from within the <br>United States</br>.</p>
+  <p>We regret to inform you that this website is only available to visitors accessing from authorized regions.</p>
   
   <div class="box">
-    <p>Our systems have detected that your current location is outside the authorized regions.</p>
-    <p>Access to this website is restricted to specific locations only.</p>
+    <p>Our systems have detected that your current location is not within our service area.</p>
+    <p>Access to this website is restricted based on your geographic location.</p>
   </div>
 
   <p>If you are physically located within an authorized region and using a VPN service, please disable it and refresh this page. For further assistance, our support team is available to help you.</p>
@@ -45,25 +45,34 @@ h1{color:#f04040;margin-top:10px}
 <p class="err" id="error-details">Error: 403 Forbidden | Ray ID: ::RAY_ID:: | Your IP: ::CLIENT_IP:: | <span id="additional-info"></span></p>
 
 <script>
-  // Function to get URL parameters
-  function getUrlParameter(name) {
-    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-    var results = regex.exec(location.search);
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-  }
-  
-  // Determine which message to show based on block type parameter
+  // This function will run when the page loads
   window.onload = function() {
-    // This would be passed by Cloudflare. For now, we'll use a URL parameter for testing
-    var blockType = getUrlParameter('blockType') || "waf"; // Default to WAF block
+    // Get all elements with custom error tokens
+    var geoElement = document.body.innerHTML.match(/::GEO::/);
+    var ruleIdElement = document.body.innerHTML.match(/::RULE_ID::/); // If Cloudflare provides this
     
-    if (blockType === "country" || blockType === "geo") {
+    // Look for other potential indicators in the page
+    var pageText = document.body.innerText.toLowerCase();
+    var isGeoBlock = false;
+    
+    // Check if GEO token is present
+    if (geoElement) {
+      isGeoBlock = true;
+    }
+    
+    // Check page content for country/region mentions
+    if (pageText.includes('country') || pageText.includes('region') || 
+        pageText.includes('location') || pageText.includes('geographic')) {
+      isGeoBlock = true;
+    }
+    
+    // Display the appropriate message
+    if (isGeoBlock) {
       document.getElementById("geo-block").style.display = "block";
       document.getElementById("additional-info").innerText = "Region: ::GEO::";
     } else {
       document.getElementById("waf-block").style.display = "block";
-      document.getElementById("additional-info").innerText = "Block Type: WAF Rule";
+      document.getElementById("additional-info").innerText = "Block Type: WAF Security Rule";
     }
   }
 </script>
