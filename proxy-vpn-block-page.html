@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<!--
+    DC GOVERNMENT PROXY/ANONYMIZER BLOCK PAGE
+    ==========================================
+    
+    PURPOSE: Displayed when requests are detected from proxy services, anonymizers, or VPN exit nodes
+    POLICY: DC Government systems require direct connections for security and compliance
+    
+    Cache Control: Includes meta tags to ensure fresh security messages
+    - Cache-Control: no-cache, no-store, must-revalidate
+    - Pragma: no-cache
+    - Expires: 0
+    
+    DEPLOYMENT:
+    - Deploy to Cloudflare Dashboard > WAF Custom Rules
+    - Create rule to detect proxy/anonymizer traffic
+    - Configure rule to serve this custom error page
+    - Or use IP Lists for known proxy/VPN providers
+    
+    DETECTION METHODS:
+    - cf.bot_management.verified_bot = false AND cf.threat_score > 10
+    - Use Cloudflare IP Lists for known proxy/VPN/anonymizer services
+    - Custom rules based on X-Forwarded-For headers
+    - Threat intelligence feeds
+    
+    MAINTENANCE:
+    - Review quarterly for message accuracy
+    - Update contact information if SOC details change
+    - Monitor false positives and adjust detection rules
+    - Review proxy/VPN detection criteria
+    
+    Contact: DC Security Operations Center (soc@dc.gov)
+    Last Updated: [INSERT DATE]
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Proxy Access Blocked</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a4480 0%, #0d2a52 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            color: #333;
+        }
+        
+        .gov-banner {
+            width: 100%;
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 8px 20px;
+            text-align: left;
+        }
+        
+        .gov-banner-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 650px;
+            width: 100%;
+            padding: 48px 40px;
+            text-align: center;
+            border-top: 4px solid #CF0A2C;
+        }
+        
+        .header-logo {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a4480;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .gov-banner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .gov-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #4a5568;
+        }
+        
+        .gov-icon {
+            width: 14px;
+            height: 14px;
+            fill: #1a4480;
+        }
+        
+        .gov-banner-button {
+            background: none;
+            border: none;
+            color: #1a4480;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .gov-banner-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .gov-banner-content.expanded {
+            max-height: 500px;
+            padding-top: 12px;
+        }
+        
+        .gov-banner-details {
+            font-size: 11px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        
+        .gov-banner-details strong {
+            color: #2d3748;
+        }
+        
+        .gov-banner-list {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .gov-banner-list li {
+            margin: 6px 0;
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            background: #CF0A2C;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        
+        .icon svg {
+            width: 48px;
+            height: 48px;
+            fill: #ffffff;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+        
+        .message {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        
+        .policy-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        
+        .policy-box-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .policy-box-content {
+            font-size: 14px;
+            color: #78350f;
+            line-height: 1.5;
+        }
+        
+        .blocked-services {
+            background: #fef2f2;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        
+        .blocked-services-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #991b1b;
+            margin-bottom: 12px;
+        }
+        
+        .blocked-services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            font-size: 13px;
+            color: #7f1d1d;
+        }
+        
+        .blocked-services-list li {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .blocked-services-list li::before {
+            content: "×";
+            color: #dc2626;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .diagnostics {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        
+        .diagnostics-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .diagnostic-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .diagnostic-item:last-child {
+            border-bottom: none;
+        }
+        
+        .diagnostic-label {
+            font-size: 14px;
+            color: #718096;
+            font-weight: 500;
+        }
+        
+        .diagnostic-value {
+            font-size: 14px;
+            color: #2d3748;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+        
+        .help-text {
+            font-size: 14px;
+            color: #718096;
+            line-height: 1.5;
+        }
+        
+        .help-text strong {
+            color: #2d3748;
+        }
+        
+        .footer {
+            font-size: 12px;
+            color: #a0aec0;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        @media (max-width: 640px) {
+            .gov-banner {
+                padding: 6px 16px;
+            }
+            
+            .container {
+                padding: 32px 24px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .diagnostic-item {
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .blocked-services-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gov-banner">
+        <div class="gov-banner-wrapper">
+            <div class="gov-banner-header" onclick="toggleBanner()">
+                <div class="gov-banner-text">
+                    <svg class="gov-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L7 13v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H6V8h2c.55 0 1-.45 1-1V5h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                    <span><strong>Official DC Government Site</strong></span>
+                </div>
+                <button class="gov-banner-button" type="button">
+                    <span id="banner-button-text">How to verify</span>
+                </button>
+            </div>
+            <div class="gov-banner-content" id="banner-content">
+                <div class="gov-banner-details">
+                    <p><strong>This is an official DC Government website.</strong> You can verify its authenticity by:</p>
+                    <ul class="gov-banner-list">
+                        <li><strong>Check the URL:</strong> Official DC Government sites use <strong>dc.gov</strong> in their domain name</li>
+                        <li><strong>Verify the TLS Certificate:</strong> Click the padlock icon in your browser's address bar to view the SSL/TLS certificate issued to dc.gov</li>
+                        <li><strong>Look for HTTPS:</strong> Official sites use secure connections (https://) to protect your information</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="header-logo">
+                Government of the District of Columbia
+            </div>
+        
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+            </svg>
+        </div>
+        
+        <h1>Proxy/VPN Access Blocked</h1>
+        
+        <div class="policy-box">
+            <div class="policy-box-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                Security Policy Notice
+            </div>
+            <div class="policy-box-content">
+                DC Government system that you are trying to access require direct internet connections for security, compliance, and auditing purposes. Access through proxy services, VPNs, anonymizers, or similar technologies is not permitted.
+            </div>
+        </div>
+        
+        <p class="message">
+            Our security systems have detected that your connection is being routed through a proxy service, VPN, or anonymizer. To maintain the security and integrity of DC Government systems, we do not allow connections from these services.
+        </p>
+        
+        <div class="blocked-services">
+            <div class="blocked-services-title">Blocked Connection Types:</div>
+            <ul class="blocked-services-list">
+                <li>Commercial VPNs</li>
+                <li>Free Proxy Services</li>
+                <li>Web Anonymizers</li>
+                <li>TOR Exit Nodes</li>
+                <li>Public Proxies</li>
+                <li>Cloud Proxies</li>
+            </ul>
+        </div>
+        
+        <div class="diagnostics">
+            <div class="diagnostics-title">Diagnostic Information</div>
+            
+            <div class="diagnostic-item">
+                <span class="diagnostic-label">Ray ID</span>
+                <span class="diagnostic-value">::RAY_ID::</span>
+            </div>
+            
+            <div class="diagnostic-item">
+                <span class="diagnostic-label">Your IP Address</span>
+                <span class="diagnostic-value">::CLIENT_IP::</span>
+            </div>
+            
+            <div class="diagnostic-item">
+                <span class="diagnostic-label">Location</span>
+                <span class="diagnostic-value">::GEO::</span>
+            </div>
+        </div>
+        
+        <p class="help-text">
+            <strong>To access this site:</strong><br>
+            Disconnect from your VPN, proxy, or anonymizer service and connect directly through your internet service provider. If you continue to experience issues or believe this is an error, please contact the DC Security Operations Center at <a href="mailto:soc@dc.gov" style="color: #1a4480; text-decoration: none; font-weight: 600;">soc@dc.gov</a> and provide the Ray ID shown above.
+        </p>
+        
+        <div class="footer">
+            Protected by Cloudflare
+        </div>
+    </div>
+    </div>
+    
+    <script>
+        function toggleBanner() {
+            const content = document.getElementById('banner-content');
+            const buttonText = document.getElementById('banner-button-text');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                buttonText.textContent = 'How to verify';
+            } else {
+                content.classList.add('expanded');
+                buttonText.textContent = 'Hide';
+            }
+        }
+    </script>
+</body>
+</html>
