@@ -1,8 +1,40 @@
 <!DOCTYPE html>
+<!--
+    DC GOVERNMENT MAINTENANCE PAGE
+    =============================
+    
+    IMPORTANT: This is a TEMPORARY maintenance page
+    
+    Cache Control: This page includes meta tags to prevent caching
+    - Cache-Control: no-cache, no-store, must-revalidate
+    - Pragma: no-cache
+    - Expires: 0
+    - Robots: noindex, nofollow
+    
+    DEPLOYMENT CHECKLIST:
+    1. Deploy this page to Cloudflare Error Pages for maintenance
+    2. Set a calendar reminder to remove this page when maintenance is complete
+    3. After maintenance, revert to default Cloudflare error page or remove custom page
+    4. Verify site is functioning normally before removing this page
+    
+    REMOVAL INSTRUCTIONS:
+    - Go to Cloudflare Dashboard > Error Pages
+    - Select the error page type where this was deployed
+    - Choose "Cloudflare default page" or configure appropriate error page
+    - Test site functionality
+    
+    Page deployed: [INSERT DATE/TIME]
+    Maintenance window: [INSERT SCHEDULED END TIME]
+    Contact: DC Security Operations Center (soc@dc.gov)
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="robots" content="noindex, nofollow">
     <title>Site Maintenance</title>
     <style>
         * {
@@ -222,6 +254,13 @@
             border-top: 1px solid #e2e8f0;
         }
         
+        .refresh-notice {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 12px;
+            font-style: italic;
+        }
+        
         @media (max-width: 640px) {
             .gov-banner {
                 padding: 6px 16px;
@@ -284,7 +323,7 @@
         <h1>We're Making Things Better!</h1>
         
         <p class="message">
-            Great things are happening! We're upgrading <strong>this site</strong> to serve you better with improved features and enhanced performance. We'll be back soon with an even better experience. Thanks for your patience while we level up!
+            Great things are happening! We're upgrading <strong id="site-name">this site</strong> to serve you better with improved features and enhanced performance. We'll be back soon with an even better experience. Thanks for your patience while we level up!
         </p>
         
         <div class="diagnostic-info">
@@ -305,11 +344,23 @@
         
         <div class="footer">
             Protected by Cloudflare
+            <div class="refresh-notice">
+                This page will automatically refresh every 60 seconds
+            </div>
         </div>
     </div>
     </div>
     
     <script>
+        // Dynamically set the site name
+        document.getElementById('site-name').textContent = window.location.hostname;
+        
+        // Auto-refresh every 60 seconds to check if maintenance is complete
+        // This ensures users see the live site as soon as it's back online
+        setTimeout(function() {
+            window.location.reload(true); // Force reload from server, not cache
+        }, 60000); // 60 seconds
+        
         function toggleBanner() {
             const content = document.getElementById('banner-content');
             const buttonText = document.getElementById('banner-button-text');
