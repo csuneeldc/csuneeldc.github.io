@@ -16,9 +16,32 @@
             background: linear-gradient(135deg, #1a4480 0%, #0d2a52 100%);
             color: #333;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 0;
+        }
+        
+        .gov-banner {
+            width: 100%;
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 8px 20px;
+            text-align: left;
+        }
+        
+        .gov-banner-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
             padding: 20px;
         }
         
@@ -31,6 +54,70 @@
             padding: 48px 40px;
             text-align: center;
             border-top: 4px solid #CF0A2C;
+        }
+        
+        .gov-banner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .gov-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #4a5568;
+        }
+        
+        .gov-icon {
+            width: 14px;
+            height: 14px;
+            fill: #1a4480;
+        }
+        
+        .gov-banner-button {
+            background: none;
+            border: none;
+            color: #1a4480;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .gov-banner-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .gov-banner-content.expanded {
+            max-height: 500px;
+            padding-top: 12px;
+        }
+        
+        .gov-banner-details {
+            font-size: 11px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+        
+        .gov-banner-details strong {
+            color: #2d3748;
+        }
+        
+        .gov-banner-list {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        
+        .gov-banner-list li {
+            margin: 6px 0;
         }
         
         .header-logo {
@@ -136,6 +223,10 @@
         }
         
         @media (max-width: 640px) {
+            .gov-banner {
+                padding: 6px 16px;
+            }
+            
             .container {
                 padding: 32px 24px;
             }
@@ -152,10 +243,37 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header-logo">
-            Government of the District of Columbia
+    <div class="gov-banner">
+        <div class="gov-banner-wrapper">
+            <div class="gov-banner-header" onclick="toggleBanner()">
+                <div class="gov-banner-text">
+                    <svg class="gov-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L7 13v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H6V8h2c.55 0 1-.45 1-1V5h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                    <span><strong>Official DC Government Site</strong></span>
+                </div>
+                <button class="gov-banner-button" type="button">
+                    <span id="banner-button-text">How to verify</span>
+                </button>
+            </div>
+            <div class="gov-banner-content" id="banner-content">
+                <div class="gov-banner-details">
+                    <p><strong>This is an official DC Government website.</strong> You can verify its authenticity by:</p>
+                    <ul class="gov-banner-list">
+                        <li><strong>Check the URL:</strong> Official DC Government sites use <strong>dc.gov</strong> in their domain name</li>
+                        <li><strong>Verify the TLS Certificate:</strong> Click the padlock icon in your browser's address bar to view the SSL/TLS certificate issued to dc.gov</li>
+                        <li><strong>Look for HTTPS:</strong> Official sites use secure connections (https://) to protect your information</li>
+                    </ul>
+                </div>
+            </div>
         </div>
+    </div>
+    
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="header-logo">
+                Government of the District of Columbia
+            </div>
         
         <div class="icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -166,7 +284,7 @@
         <h1>We're Making Things Better!</h1>
         
         <p class="message">
-            Great things are happening! We're upgrading <strong>cloudflarepreview.com</strong> to serve you better with improved features and enhanced performance. We'll be back soon with an even better experience. Thanks for your patience while we level up!
+            Great things are happening! We're upgrading <strong>this site</strong> to serve you better with improved features and enhanced performance. We'll be back soon with an even better experience. Thanks for your patience while we level up!
         </p>
         
         <div class="diagnostic-info">
@@ -189,5 +307,21 @@
             Protected by Cloudflare
         </div>
     </div>
+    </div>
+    
+    <script>
+        function toggleBanner() {
+            const content = document.getElementById('banner-content');
+            const buttonText = document.getElementById('banner-button-text');
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                buttonText.textContent = 'How to verify';
+            } else {
+                content.classList.add('expanded');
+                buttonText.textContent = 'Hide';
+            }
+        }
+    </script>
 </body>
 </html>
