@@ -63,7 +63,7 @@
             color: #333;
             display: flex;
             flex-direction: column;
-            /* No justify-content:center — clips tall content on mobile */
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
             min-height: 100dvh; /* Handles collapsing URL bar on iOS Safari / Android Chrome */
@@ -165,7 +165,7 @@
             align-items: center;
             flex: 1;
             width: 100%;
-            padding: 20px;
+            padding: 16px;
         }
 
         /* ── Card ── */
@@ -440,19 +440,19 @@
                 padding: 8px 16px;
             }
 
-            /* Content area — flush edges, scrollable */
+            /* Content area — near-flush edges on mobile */
             .content-wrapper {
-                padding: 16px 12px 24px;
-                align-items: flex-start;
+                padding: 8px 8px 8px;
+                align-items: center;
                 width: 100%;
             }
 
-            /* Card */
+            /* Card — full available width with minimal side gap */
             .container {
                 padding: 24px 16px 28px;
                 border-radius: 10px;
-                /* Ensure card never overflows viewport width */
                 max-width: 100%;
+                width: 100%;
                 box-sizing: border-box;
             }
 
@@ -741,10 +741,8 @@
 
         // Sync body top-padding to actual fixed banner height + safe area
         function adjustPadding() {
-            var bannerH    = document.querySelector('.gov-banner').offsetHeight;
-            // Add 16px breathing room below banner; safe-area-inset-top already
-            // included in the banner's own position since it's fixed at top:0
-            document.body.style.paddingTop = (bannerH + 16) + 'px';
+            var bannerH = document.querySelector('.gov-banner').offsetHeight;
+            document.body.style.paddingTop = (bannerH + 8) + 'px';
         }
 
         // Set correct padding on load and on resize
