@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<!--
+    DC GOVERNMENT DECOMMISSION PAGE
+    ================================
+
+    IMPORTANT: This is a PERMANENT decommission page for sites that have been
+    retired, consolidated, or are no longer required.
+
+    Cache Control: This page includes meta tags to prevent caching
+    - Cache-Control: no-cache, no-store, must-revalidate
+    - Pragma: no-cache
+    - Expires: 0
+    - Robots: noindex, nofollow
+
+    DEPLOYMENT CHECKLIST:
+    1. Deploy this page to Cloudflare Custom Error Pages (503 or via WAF rule)
+    2. Update DECOMMISSION_DATE, REDIRECT_URL, and CONTACT_EMAIL below
+    3. If a replacement URL exists, update the "Visit Replacement Site" button
+    4. Notify stakeholders and update internal documentation
+    5. Submit a DNS/redirect ticket if applicable
+
+    REMOVAL INSTRUCTIONS (if site is reinstated):
+    - Go to Cloudflare Dashboard > Error Pages
+    - Remove the custom page or update WAF rule
+    - Restore DNS records as appropriate
+    - Test full site functionality before announcing
+
+    CUSTOMISATION VARIABLES (update before deploying):
+    - DECOMMISSION_DATE : date this site was retired  (line ~290)
+    - REDIRECT_URL      : replacement site URL        (line ~291)
+    - CONTACT_EMAIL     : support contact             (line ~292)
+
+    Page deployed: [INSERT DATE/TIME]
+    Decommissioned by: [INSERT TEAM/OWNER]
+    Contact: DC Security Operations Center (soc@dc.gov)
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Site Decommissioned | DC Government</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a4480 0%, #0d2a52 100%);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding-top: 110px; /* offset for fixed banner height */
+        }
+
+        /* ── Gov Banner — fixed, starts expanded ── */
+        .gov-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            width: 100%;
+            background: #f7fafc;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 8px 20px;
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .gov-banner-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gov-banner-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .gov-banner-text {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #4a5568;
+        }
+
+        .gov-icon {
+            width: 14px;
+            height: 14px;
+            fill: #1a4480;
+        }
+
+        .gov-banner-button {
+            background: none;
+            border: none;
+            color: #1a4480;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .gov-banner-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .gov-banner-content.expanded {
+            max-height: 500px;
+            padding-top: 10px;
+        }
+
+        .gov-banner-details {
+            font-size: 11px;
+            color: #4a5568;
+            line-height: 1.5;
+        }
+
+        .gov-banner-details strong {
+            color: #2d3748;
+        }
+
+        .gov-banner-list {
+            margin: 6px 0 0;
+            padding-left: 20px;
+        }
+
+        .gov-banner-list li {
+            margin: 4px 0;
+        }
+
+        /* ── Content wrapper ── */
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+        }
+
+        /* ── Card ── */
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 48px 40px;
+            text-align: center;
+            border-top: 4px solid #CF0A2C;
+        }
+
+        .header-logo {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a4480;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* ── Icon ── */
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: #CF0A2C;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: #ffffff;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+
+        .message {
+            font-size: 16px;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* ── Status badge ── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #c53030;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 20px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #c53030;
+        }
+
+        /* ── What this means checklist ── */
+        .notice-box {
+            background: #fffbeb;
+            border: 1px solid #f6d860;
+            border-radius: 8px;
+            padding: 16px 20px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .notice-box-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #92400e;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 10px;
+        }
+
+        .notice-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .notice-list li {
+            font-size: 13px;
+            color: #78350f;
+            line-height: 1.5;
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .notice-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #d97706;
+            font-weight: 700;
+        }
+
+        /* ── Action button ── */
+        .action-section {
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #1a4480;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+            letter-spacing: 0.2px;
+        }
+
+        .btn-primary:hover {
+            background: #153466;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            color: #1a4480;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: 1px solid #bee3f8;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #ebf8ff;
+        }
+
+        /* ── Diagnostic info ── */
+        .diagnostic-info {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 24px;
+            text-align: left;
+            margin-top: 8px;
+        }
+
+        .diagnostic-info h2 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #718096;
+        }
+
+        .info-value {
+            color: #2d3748;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            word-break: break-all;
+            text-align: right;
+        }
+
+        .info-value.status-decommissioned {
+            color: #c53030;
+        }
+
+        /* ── Help text ── */
+        .help-text {
+            font-size: 13px;
+            color: #718096;
+            line-height: 1.6;
+            margin-top: 20px;
+            padding: 0 4px;
+        }
+
+        .help-text a {
+            color: #1a4480;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            font-size: 12px;
+            color: #a0aec0;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            body {
+                padding-top: 130px; /* banner wraps on small screens */
+            }
+
+            .gov-banner {
+                padding: 6px 16px 10px;
+            }
+
+            .container {
+                padding: 32px 24px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .info-value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── DC Gov Banner — fixed, starts expanded, toggle to hide ── -->
+    <div class="gov-banner">
+        <div class="gov-banner-wrapper">
+            <div class="gov-banner-header" onclick="toggleBanner()">
+                <div class="gov-banner-text">
+                    <svg class="gov-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L7 13v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H6V8h2c.55 0 1-.45 1-1V5h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                    <span><strong>Official DC Government Site</strong></span>
+                </div>
+                <button class="gov-banner-button" type="button">
+                    <span id="banner-button-text">How to verify</span>
+                </button>
+            </div>
+            <div class="gov-banner-content" id="banner-content">
+                <div class="gov-banner-details">
+                    <p><strong>This is an official DC Government website.</strong> You can verify its authenticity by:</p>
+                    <ul class="gov-banner-list">
+                        <li><strong>Check the URL:</strong> Official DC Government sites use <strong>dc.gov</strong> in their domain name</li>
+                        <li><strong>Verify the TLS Certificate:</strong> Click the padlock icon in your browser's address bar to view the SSL/TLS certificate issued to dc.gov</li>
+                        <li><strong>Look for HTTPS:</strong> Official sites use secure connections (https://) to protect your information</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Main content ── -->
+    <div class="content-wrapper">
+        <div class="container">
+
+            <div class="header-logo">
+                Government of the District of Columbia
+            </div>
+
+            <!-- Archive / decommission icon -->
+            <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                </svg>
+            </div>
+
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                Permanently Decommissioned
+            </div>
+
+            <h1>This Site Has Been Retired</h1>
+
+            <p class="message">
+                <strong id="site-name">This site</strong> has been permanently decommissioned and is no longer available.
+                This is not a temporary outage — the service has been intentionally retired as part of DC Government
+                infrastructure consolidation efforts.
+            </p>
+
+            <!-- What this means notice -->
+            <div class="notice-box">
+                <div class="notice-box-title">What this means for you</div>
+                <ul class="notice-list">
+                    <li>All content and services on this domain have been permanently removed.</li>
+                    <li>Bookmarks and saved links to this site should be deleted or updated.</li>
+                    <li>API integrations or automated scripts pointing here must be reconfigured.</li>
+                    <li>No automatic redirect is in place — you must navigate to the new location manually.</li>
+                </ul>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-section">
+                <a href="#" class="btn-primary" id="btn-replacement">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
+                    </svg>
+                    Visit DC.gov Main Portal
+                </a>
+                <br>
+                <a href="#" class="btn-secondary" id="btn-contact">
+                    ✉ Contact DC Government Support
+                </a>
+            </div>
+
+            <!-- Cloudflare diagnostic info -->
+            <div class="diagnostic-info">
+                <h2>Diagnostic Information</h2>
+                <div class="info-row">
+                    <span class="info-label">Ray ID</span>
+                    <span class="info-value">::RAY_ID::</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Your IP Address</span>
+                    <span class="info-value">::CLIENT_IP::</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Location</span>
+                    <span class="info-value">::GEO::</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Host</span>
+                    <span class="info-value" id="diag-host">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">HTTP Status</span>
+                    <span class="info-value status-decommissioned">410 Gone (Permanent)</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Decommission Date</span>
+                    <span class="info-value" id="diag-date">—</span>
+                </div>
+            </div>
+
+            <p class="help-text">
+                If you believe this page was reached in error or need assistance locating a specific
+                DC Government service, please contact the
+                <a href="/cdn-cgi/l/email-protection#a1d2cec2e1c5c28fc6ced7" id="help-email">DC Security Operations Center (<span class="__cf_email__" data-cfemail="e89b878ba88c8bc68f879e">[email&#160;protected]</span>)</a>
+                or visit <a href="https://dc.gov" id="help-dcgov">dc.gov</a> for the full services directory.
+            </p>
+
+            <div class="footer">
+                Protected by Cloudflare
+            </div>
+
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // ─────────────────────────────────────────────────────────────────────
+        // CONFIGURATION — update these three values before deploying
+        // ─────────────────────────────────────────────────────────────────────
+        var DECOMMISSION_DATE = '2025-01-01';          // Date site was retired
+        var REDIRECT_URL      = 'https://dc.gov';      // Replacement / main portal URL
+        var CONTACT_EMAIL     = 'soc@dc.gov';          // Support contact email
+        // ─────────────────────────────────────────────────────────────────────
+
+        var host = window.location.hostname || 'this site';
+
+        // Populate host references
+        document.getElementById('site-name').textContent = host;
+        document.getElementById('diag-host').textContent = host;
+        document.getElementById('diag-date').textContent = DECOMMISSION_DATE;
+
+        // Buttons
+        document.getElementById('btn-replacement').href = REDIRECT_URL;
+        document.getElementById('btn-contact').href =
+            'mailto:' + CONTACT_EMAIL +
+            '?subject=' + encodeURIComponent('Decommissioned site enquiry: ' + host);
+
+        // Help links
+        document.getElementById('help-email').href    = 'mailto:' + CONTACT_EMAIL;
+        document.getElementById('help-email').textContent =
+            'DC Security Operations Center (' + CONTACT_EMAIL + ')';
+
+        // ── Gov banner toggle ──────────────────────────────────────────────
+        function toggleBanner() {
+            var content    = document.getElementById('banner-content');
+            var buttonText = document.getElementById('banner-button-text');
+
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                buttonText.textContent = 'How to verify';
+            } else {
+                content.classList.add('expanded');
+                buttonText.textContent = 'Hide';
+            }
+
+            // Adjust body padding to match new banner height after transition
+            setTimeout(adjustPadding, 320);
+        }
+
+        // Sync body top-padding to actual fixed banner height
+        function adjustPadding() {
+            var bannerH = document.querySelector('.gov-banner').offsetHeight;
+            document.body.style.paddingTop = (bannerH + 16) + 'px';
+        }
+
+        // Set correct padding on load and on resize
+        adjustPadding();
+        window.addEventListener('resize', adjustPadding);
+
+    </script>
+</body>
+</html>
