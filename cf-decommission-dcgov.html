@@ -277,8 +277,12 @@
             font-weight: 700;
         }
 
-        /* ── Action button ── */
+        /* ── Action buttons ── */
         .action-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 24px;
         }
 
@@ -412,29 +416,135 @@
 
         /* ── Responsive ── */
         @media (max-width: 640px) {
-            body {
-                padding-top: 130px; /* banner wraps on small screens */
-            }
 
+            /* Banner */
             .gov-banner {
-                padding: 6px 16px 10px;
+                padding: 8px 16px;
             }
 
+            /* Reduce overall body padding — JS adjustPadding() handles the rest */
+            .content-wrapper {
+                padding: 12px;
+                align-items: flex-start;
+            }
+
+            /* Card */
             .container {
-                padding: 32px 24px;
+                padding: 24px 16px 28px;
+                border-radius: 10px;
             }
 
+            /* Header */
+            .header-logo {
+                font-size: 11px;
+                letter-spacing: 0.5px;
+                margin-bottom: 20px;
+                padding-bottom: 14px;
+            }
+
+            /* Icon */
+            .icon {
+                width: 64px;
+                height: 64px;
+                margin-bottom: 18px;
+            }
+
+            .icon svg {
+                width: 32px;
+                height: 32px;
+            }
+
+            /* Typography */
             h1 {
-                font-size: 22px;
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
+
+            .message {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            /* Status badge */
+            .status-badge {
+                font-size: 11px;
+                padding: 4px 12px;
+                margin-bottom: 14px;
+            }
+
+            /* Notice box */
+            .notice-box {
+                padding: 14px;
+                text-align: left;
+                margin-bottom: 20px;
+            }
+
+            .notice-list li {
+                font-size: 13px;
+            }
+
+            /* Buttons — full width, stacked, touch-friendly */
+            .action-section {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                padding: 14px 16px;
+                font-size: 14px;
+                justify-content: center;
+            }
+
+            /* Diagnostic table — stack label above value */
+            .diagnostic-info {
+                padding: 16px;
             }
 
             .info-row {
                 flex-direction: column;
-                gap: 4px;
+                gap: 2px;
+                padding: 10px 0;
+            }
+
+            .info-label {
+                font-size: 11px;
             }
 
             .info-value {
+                font-size: 12px;
                 text-align: left;
+            }
+
+            /* Help text */
+            .help-text {
+                font-size: 12px;
+                margin-top: 16px;
+            }
+
+            /* Footer */
+            .footer {
+                font-size: 11px;
+                margin-top: 18px;
+                padding-top: 18px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .container {
+                padding: 20px 12px 24px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .header-logo {
+                font-size: 10px;
             }
         }
     </style>
@@ -515,7 +625,6 @@
                     </svg>
                     Visit DC.gov Main Portal
                 </a>
-                <br>
                 <a href="#" class="btn-secondary" id="btn-contact">
                     ✉ Contact DC Government Support
                 </a>
